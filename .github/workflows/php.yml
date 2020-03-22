@@ -26,6 +26,6 @@ jobs:
       working-directory: ./src
 
     - name: Run PHP Mess Detector(PHPMD)
-      run: ./vendor/bin/phpmd app --reportfile ../output/phpmd.result.xml xml ../ci/phpmd.ruleset.xml --ignore-violations-on-exit
+      run: ./vendor/bin/phpmd app --reportfile ../output/phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
       working-directory: ./src
 
