@@ -13,11 +13,8 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    - name: Change Current Directory
-      run: cd src
-
     - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+      run: composer install -d=./src -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
 
     - name: Generate key
       run: php artisan key:generate
