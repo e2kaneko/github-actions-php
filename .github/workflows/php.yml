@@ -49,9 +49,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download math result for job 2
-          uses: actions/download-artifact@v1
-          with:
-            name: output
+        uses: actions/download-artifact@v1
+        with:
+          name: output
       - name: Print the final result
         shell: bash
         run: |
