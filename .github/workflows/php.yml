@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,6 +26,11 @@ jobs:
       run: php artisan key:generate
       working-directory: ./src
 
+  statistics:
+    name: Statistics
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Run PHP Mess Detector(PHPMD)
       run: ./vendor/bin/phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
       working-directory: ./src
@@ -35,3 +41,19 @@ jobs:
         name: output
         path: ./src/phpmd.result.xml
 
+    - name: Display PHPMD Results
+
+  result:
+    name: Result
+    needs: statistics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download math result for job 2
+          uses: actions/download-artifact@v1
+          with:
+            name: output
+      - name: Print the final result
+        shell: bash
+        run: |
+          value=`cat ./src/phpmd.result.xml`
+          echo The result is $value
