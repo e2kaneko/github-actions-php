@@ -11,12 +11,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: PHP Version Check
+      run: php -v
+
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       working-directory: ./src
-
-    - name: PHP Version Check
-      run: php -v
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
@@ -52,8 +52,3 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: output
-      - name: Print the final result
-        shell: bash
-        run: |
-          value=`cat ./src/phpmd.result.xml`
-          echo The result is $value
