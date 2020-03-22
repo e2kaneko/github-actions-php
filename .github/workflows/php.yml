@@ -36,10 +36,6 @@ jobs:
         name: output
         path: ./src/phpmd.result.xml
 
-    - name: Download math result for job 2
-      uses: actions/download-artifact@v1
-      with:
-        name: output
     - name: Print the final result
       shell: bash
       run: |
