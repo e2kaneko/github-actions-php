@@ -43,7 +43,7 @@ jobs:
         echo The result is $value
 
     - name: Run PHP_CodeSniffer(PHPCS)
-      run: ./vendor/bin/phpcs --report-file=../phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
+      run: ./vendor/bin/phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
       working-directory: ./src
 
     - name: Upload PHPCS File
