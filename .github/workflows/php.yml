@@ -40,7 +40,7 @@ jobs:
       shell: bash
       run: |
         value=`cat ./src/phpmd.result.xml`
-        echo The result is $value
+        echo $value
 
     - name: Run PHP_CodeSniffer(PHPCS)
       run: ./vendor/bin/phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
@@ -56,5 +56,5 @@ jobs:
       shell: bash
       run: |
         value=`cat ./src/phpcs.result.xml`
-        echo The result is $value
+        echo $value
 
