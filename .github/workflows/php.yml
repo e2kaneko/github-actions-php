@@ -26,6 +26,12 @@ jobs:
       working-directory: ./src
 
     - name: Run PHP Mess Detector(PHPMD)
-      run: ./vendor/bin/phpmd app --reportfile ../output/phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
+      run: ./vendor/bin/phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
       working-directory: ./src
+
+    - name: Upload PHPMD File
+        uses: actions/upload-artifact@v1
+        with:
+          name: output
+          path: .phpmd.result.xml
 
