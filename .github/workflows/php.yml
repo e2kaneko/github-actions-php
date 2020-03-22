@@ -13,6 +13,9 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('./src/.env') || copy('./src/.env.example', './src/.env');"
 
+    - name: PHP Version Check
+      run: php -v
+
     - name: Install Dependencies
       run: composer install --working-dir=./src -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
 
