@@ -30,9 +30,8 @@ jobs:
       working-directory: ./src
 
     - name: Upload PHPMD File
-      working-directory: ./src
       uses: actions/upload-artifact@v1
       with:
         name: output
-        path: phpmd.result.xml
+        path: ./src/phpmd.result.xml
 
