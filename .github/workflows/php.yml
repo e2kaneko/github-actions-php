@@ -41,8 +41,6 @@ jobs:
         name: output
         path: ./src/phpmd.result.xml
 
-    - name: Display PHPMD Results
-
   result:
     name: Result
     needs: statistics
@@ -52,3 +50,8 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: output
+      - name: Print the final result
+        shell: bash
+        run: |
+          value=`cat ./src/phpmd.result.xml`
+          echo The result is $value
