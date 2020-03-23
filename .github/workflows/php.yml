@@ -49,21 +49,27 @@ jobs:
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        working-directory: ./src
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+        working-directory: ./src
       - name: Prepare the application
         run: |
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan key:generate
+        working-directory: ./src
       - name: Clear Config
         run: php artisan config:clear
+        working-directory: ./src
       - name: Run Migration
         run: php artisan migrate -v
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+        working-directory: ./src
       - name: Test with phpunit
         run: vendor/bin/phpunit --coverage-text
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+        working-directory: ./src
