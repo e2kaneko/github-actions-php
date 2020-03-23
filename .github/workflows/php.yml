@@ -114,7 +114,7 @@ jobs:
           echo $value
 
       - name: Run PHP Copy/Paste Detector(PHPCPD)
-        run: ./vendor/bin/phpcpd app --log-pmd=./phpcpd.result.xml || true
+        run: phpcpd app --log-pmd=./phpcpd.result.xml || true
         working-directory: ./src
 
       - name: Upload PHPCPD File
@@ -127,5 +127,21 @@ jobs:
         shell: bash
         run: |
           value=`cat ./src/phpcpd.result.xml`
+          echo $value
+
+      - name: Run PHP Static Analysis Tool(PHPStan)
+        run: ./vendor/bin/phpstan analyse app > ./phpstan.result.txt || true
+        working-directory: ./src
+
+      - name: Upload PHPStan File
+        uses: actions/upload-artifact@v1
+        with:
+          name: output
+          path: ./src/phpstan.result.txt
+
+      - name: Print PHPStan result
+        shell: bash
+        run: |
+          value=`cat ./src/phpstan.result.txt`
           echo $value
 
