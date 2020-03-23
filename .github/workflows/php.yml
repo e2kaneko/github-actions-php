@@ -75,14 +75,14 @@ jobs:
         working-directory: ./src
 
       - name: Test with PHPUnit
-        run: vendor/bin/phpunit --coverage-text
+        run: phpunit --coverage-text
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
         working-directory: ./src
 
       - name: Run PHP Mess Detector(PHPMD)
-        run: ./vendor/bin/phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
+        run: phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
         working-directory: ./src
 
       - name: Upload PHPMD File
@@ -98,7 +98,7 @@ jobs:
           echo $value
 
       - name: Run PHP_CodeSniffer(PHPCS)
-        run: ./vendor/bin/phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
+        run: phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
         working-directory: ./src
 
       - name: Upload PHPCS File
@@ -130,7 +130,7 @@ jobs:
           echo $value
 
       - name: Run PHP Static Analysis Tool(PHPStan)
-        run: ./vendor/bin/phpstan analyse app > ./phpstan.result.txt || true
+        run: phpstan analyse app > ./phpstan.result.txt || true
         working-directory: ./src
 
       - name: Upload PHPStan File
