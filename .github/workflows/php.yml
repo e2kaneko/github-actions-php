@@ -33,8 +33,10 @@ jobs:
       matrix:
         php-versions: ['7.2', '7.3', '7.4']
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
@@ -46,30 +48,69 @@ jobs:
 
       - name: Start mysql service
         run: sudo /etc/init.d/mysql start
+
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
         working-directory: ./src
+
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
         working-directory: ./src
+
       - name: Prepare the application
         run: |
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan key:generate
         working-directory: ./src
+
       - name: Clear Config
         run: php artisan config:clear
         working-directory: ./src
+
       - name: Run Migration
         run: php artisan migrate -v
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
         working-directory: ./src
+
       - name: Test with phpunit
         run: vendor/bin/phpunit --coverage-text
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
         working-directory: ./src
+
+      - name: Run PHP Mess Detector(PHPMD)
+        run: ./vendor/bin/phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
+        working-directory: ./src
+
+      - name: Upload PHPMD File
+        uses: actions/upload-artifact@v1
+        with:
+          name: output
+          path: ./src/phpmd.result.xml
+
+      - name: Print PHPMD result
+        shell: bash
+        run: |
+          value=`cat ./src/phpmd.result.xml`
+          echo $value
+
+      - name: Run PHP_CodeSniffer(PHPCS)
+        run: ./vendor/bin/phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
+        working-directory: ./src
+
+      - name: Upload PHPCS File
+        uses: actions/upload-artifact@v1
+        with:
+          name: output
+          path: ./src/phpcs.result.xml
+
+      - name: Print PHPCS result
+        shell: bash
+        run: |
+          value=`cat ./src/phpcs.result.xml`
+          echo $value
+
