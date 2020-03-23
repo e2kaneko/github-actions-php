@@ -33,7 +33,6 @@ jobs:
       matrix:
         php-versions: ['7.2', '7.3', '7.4']
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -44,7 +43,7 @@ jobs:
           extensions: mbstring, dom, fileinfo, mysql, intl
           coverage: xdebug #optional
           ini-values: post_max_size=256M, short_open_tag=On
-          tools: php-cs-fixer, phpunit, phpmd
+          tools: php-cs-fixer, phpunit, phpmd, phpstan, phpcs, phpcpd
 
       - name: Start mysql service
         run: sudo /etc/init.d/mysql start
@@ -75,7 +74,7 @@ jobs:
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
         working-directory: ./src
 
-      - name: Test with phpunit
+      - name: Test with PHPUnit
         run: vendor/bin/phpunit --coverage-text
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
@@ -112,5 +111,21 @@ jobs:
         shell: bash
         run: |
           value=`cat ./src/phpcs.result.xml`
+          echo $value
+
+      - name: Run PHP Copy/Paste Detector(PHPCPD)
+        run: ./vendor/bin/phpcpd app --log-pmd=./phpcpd.result.xml || true
+        working-directory: ./src
+
+      - name: Upload PHPCPD File
+        uses: actions/upload-artifact@v1
+        with:
+          name: output
+          path: ./src/phpcpd.result.xml
+
+      - name: Print PHPCPD result
+        shell: bash
+        run: |
+          value=`cat ./src/phpcpd.result.xml`
           echo $value
 
