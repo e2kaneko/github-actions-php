@@ -20,4 +20,8 @@ class SampleController extends Controller
     public function sample3(){
         print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;print 1;
     }
+
+    public function sample4($unusedParameter){
+        // nothing to do
+    }
 }
