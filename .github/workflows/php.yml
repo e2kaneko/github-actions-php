@@ -82,7 +82,10 @@ jobs:
         working-directory: ./src
 
       - name: Run PHP Mess Detector(PHPMD)
-        run: phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
+        run: |
+          phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
+          value=`cat ./src/phpmd.result.xml`
+          echo $value
         working-directory: ./src
 
       - name: Upload PHPMD File
@@ -91,14 +94,11 @@ jobs:
           name: output
           path: ./src/phpmd.result.xml
 
-      - name: Print PHPMD result
-        shell: bash
-        run: |
-          value=`cat ./src/phpmd.result.xml`
-          echo $value
-
       - name: Run PHP_CodeSniffer(PHPCS)
-        run: phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
+        run: |
+          phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
+          value=`cat ./src/phpcs.result.xml`
+          echo $value
         working-directory: ./src
 
       - name: Upload PHPCS File
@@ -107,14 +107,11 @@ jobs:
           name: output
           path: ./src/phpcs.result.xml
 
-      - name: Print PHPCS result
-        shell: bash
-        run: |
-          value=`cat ./src/phpcs.result.xml`
-          echo $value
-
       - name: Run PHP Copy/Paste Detector(PHPCPD)
-        run: phpcpd app --log-pmd=./phpcpd.result.xml || true
+        run: |
+          phpcpd app --log-pmd=./phpcpd.result.xml || true
+          value=`cat ./src/phpcpd.result.xml`
+          echo $value
         working-directory: ./src
 
       - name: Upload PHPCPD File
@@ -123,14 +120,11 @@ jobs:
           name: output
           path: ./src/phpcpd.result.xml
 
-      - name: Print PHPCPD result
-        shell: bash
-        run: |
-          value=`cat ./src/phpcpd.result.xml`
-          echo $value
-
       - name: Run PHP Static Analysis Tool(PHPStan)
-        run: phpstan analyse app > ./phpstan.result.txt || true
+        run: |
+          phpstan analyse app > ./phpstan.result.txt || true
+          value=`cat ./src/phpstan.result.txt`
+          echo $value
         working-directory: ./src
 
       - name: Upload PHPStan File
@@ -138,10 +132,3 @@ jobs:
         with:
           name: output
           path: ./src/phpstan.result.txt
-
-      - name: Print PHPStan result
-        shell: bash
-        run: |
-          value=`cat ./src/phpstan.result.txt`
-          echo $value
-
