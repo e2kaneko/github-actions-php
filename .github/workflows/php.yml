@@ -84,7 +84,7 @@ jobs:
       - name: Run PHP Mess Detector(PHPMD)
         run: |
           phpmd app --reportfile ./phpmd.result.xml xml ../.github/workflows/phpmd.ruleset.xml --ignore-violations-on-exit
-          value=`cat ./src/phpmd.result.xml`
+          value=`cat ./phpmd.result.xml`
           echo $value
         working-directory: ./src
 
@@ -92,12 +92,13 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: output
-          path: ./src/phpmd.result.xml
+          path: ./phpmd.result.xml
+        working-directory: ./src
 
       - name: Run PHP_CodeSniffer(PHPCS)
         run: |
           phpcs --report-file=./phpcs.result.xml --standard=../.github/workflows/phpcs.xml app || true
-          value=`cat ./src/phpcs.result.xml`
+          value=`cat ./phpcs.result.xml`
           echo $value
         working-directory: ./src
 
@@ -105,12 +106,13 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: output
-          path: ./src/phpcs.result.xml
+          path: ./phpcs.result.xml
+        working-directory: ./src
 
       - name: Run PHP Copy/Paste Detector(PHPCPD)
         run: |
           phpcpd app --log-pmd=./phpcpd.result.xml || true
-          value=`cat ./src/phpcpd.result.xml`
+          value=`cat ./phpcpd.result.xml`
           echo $value
         working-directory: ./src
 
@@ -118,12 +120,13 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: output
-          path: ./src/phpcpd.result.xml
+          path: ./phpcpd.result.xml
+        working-directory: ./src
 
       - name: Run PHP Static Analysis Tool(PHPStan)
         run: |
           phpstan analyse app > ./phpstan.result.txt || true
-          value=`cat ./src/phpstan.result.txt`
+          value=`cat ./phpstan.result.txt`
           echo $value
         working-directory: ./src
 
@@ -131,4 +134,5 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: output
-          path: ./src/phpstan.result.txt
+          path: ./phpstan.result.txt
+        working-directory: ./src
